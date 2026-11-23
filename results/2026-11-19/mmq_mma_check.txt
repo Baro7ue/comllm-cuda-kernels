@@ -1,0 +1,90 @@
+
+=== 正在运行的 llama 进程（有的话先不查，免得抢 CPU）
+无
+
+=== llama.cpp 版本
+5aeac37a35b44fde4bdffaec9159f2fcb253b622  Sun Oct 18 10:59:06 2026 +0200
+
+=== 编译选项（build/CMakeCache.txt）
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CUDA_ARCHITECTURES:UNINITIALIZED=87
+GGML_CUDA:BOOL=ON
+GGML_CUDA_CCCL_VERSION:STRING=
+GGML_CUDA_COMPRESSION_MODE:STRING=size
+GGML_CUDA_FA:BOOL=ON
+GGML_CUDA_FA_ALL_QUANTS:BOOL=OFF
+GGML_CUDA_FA_QUANTS:STRING=q4_0-q4_0;q8_0-q8_0;f16-f16;bf16-bf16
+GGML_CUDA_FORCE_CUBLAS:BOOL=OFF
+GGML_CUDA_FORCE_MMQ:BOOL=OFF
+GGML_CUDA_GRAPHS:BOOL=ON
+GGML_CUDA_NCCL:BOOL=ON
+GGML_CUDA_NO_PEER_COPY:BOOL=OFF
+GGML_CUDA_NO_VMM:BOOL=OFF
+
+=== CUDA 库文件
+-rwxrwxr-x 1 user  user  62133944 Oct 18 20:35 ~/llama.cpp/build/bin/libggml-cuda.so.0.27.0
+
+=== 库里带了哪些架构的机器码（ELF）和中间码（PTX）
+    145 sm_87
+    145 sm_87
+
+=== 源码：什么条件下算 TURING/AMPERE_MMA_AVAILABLE（common.cuh）
+286:#define VOLTA_MMA_AVAILABLE
+290:#define TURING_MMA_AVAILABLE
+294:#define AMPERE_MMA_AVAILABLE
+298:#    define BLACKWELL_MMA_AVAILABLE
+878:#if defined(BLACKWELL_MMA_AVAILABLE) // This is used for NVFP4 subblock scale quantizations only
+887:#endif // defined(BLACKWELL_MMA_AVAILABLE)
+
+=== 源码：mmq.cuh 里按什么条件选张量核
+189:        if (amd_mfma_available(cc) || amd_wmma_available(cc) || turing_mma_available(cc)) {
+196:#if defined(AMD_MFMA_AVAILABLE) || defined(AMD_WMMA_AVAILABLE) || defined(TURING_MMA_AVAILABLE)
+200:#endif // defined(AMD_MFMA_AVAILABLE) || defined(AMD_WMMA_AVAILABLE) || defined(TURING_MMA_AVAILABLE)
+248:    if (blackwell_mma_available(cc)) {
+280:#ifdef BLACKWELL_MMA_AVAILABLE
+292:#endif // BLACKWELL_MMA_AVAILABLE
+682:#ifdef BLACKWELL_MMA_AVAILABLE
+705:#endif // BLACKWELL_MMA_AVAILABLE
+892:#if defined(BLACKWELL_MMA_AVAILABLE)
+899:#endif  // defined(BLACKWELL_MMA_AVAILABLE)
+
+=== 机器码：每个 Q8_0 的 mul_mat_q 函数里，各种乘加指令的条数
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi104ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi104ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+224      0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi112ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi112ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi120ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi120ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+256      0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi128ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+256      0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi128ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+32       0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi16ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+32       0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi16ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+48       0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi24ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi24ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+64       0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi32ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+64       0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi32ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+80       0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi40ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi40ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+96       0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi48ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi48ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi56ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi56ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+128      0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi64ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+128      0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi64ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi72ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi72ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+160      0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi80ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi80ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi88ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi88ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+16       0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi8ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+16       0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi8ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+192      0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi96ELb0EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+0        0        0         sm_87  _Z9mul_mat_qIL9ggml_type8ELi96ELb1EL9ggml_prec30EEvPKcPKiS5_S5_PfS6_PKf5uint3iiiiiS9_S9_iiiS9_S9_iiiS9_
+IMMA     HMMA     IDP.4A    架构  函数
+
+=== （在 Mac 上补查）第 1 天 nsys 里实际运行的 mul_mat_q 变体：gridX | gridY | blockX | blockY | 次数 | 平均 µs | 函数
+8 | 4 | 32 | 4 | 833 | 12.3 | _Z24mul_mat_q_stream_k_fixupIL9ggml_type8ELi80ELb0
+8 | 1 | 32 | 8 | 833 | 96.8 | _Z9mul_mat_qIL9ggml_type8ELi80ELb0
+76 | 1 | 32 | 8 | 322 | 348.9 | _Z9mul_mat_qIL9ggml_type8ELi80ELb0
+来源：results/2026-11-15/nsys_p145_d133_fa1_node.sqlite

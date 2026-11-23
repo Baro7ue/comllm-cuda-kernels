@@ -1,0 +1,8 @@
+16:0.04.262.421 I slot print_timing: id  0 | task 0 |    graphs reused =          1
+17:0.04.262.423 I slot print_timing: id  0 | task 0 |   graph reallocs =          0    /     0        (same size) / (changed size)
+24:0.04.997.082 I slot print_timing: id  0 | task 2 |    graphs reused =          6
+25:0.04.997.088 I slot print_timing: id  0 | task 2 |   graph reallocs =          0    /     0        (same size) / (changed size)
+32:0.05.129.259 I slot print_timing: id  0 | task 10 |    graphs reused =          6
+33:0.05.129.260 I slot print_timing: id  0 | task 10 |   graph reallocs =          0    /     0        (same size) / (changed size)
+40:0.07.857.190 I slot print_timing: id  0 | task 12 |    graphs reused =         11
+41:0.07.857.193 I slot print_timing: id  0 | task 12 |   graph reallocs =          0    /     0        (same size) / (changed size)

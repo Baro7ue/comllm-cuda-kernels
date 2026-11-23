@@ -1,0 +1,12 @@
+{"build_commit": "5aeac37a3", "build_number": 11719, "cpu_info": "CPU", "gpu_info": "Orin", "backends": "CUDA", "model_filename": "~/models/comllm-0.5b-soft-T0.3-q8_0.gguf", "model_type": "qwen2 1B Q8_0", "model_size": 525120000, "model_n_params": 494032768, "n_batch": 2048, "n_ubatch": 512, "n_threads": 6, "cpu_mask": "0x0", "cpu_strict": false, "poll": 50, "type_k": "f16", "type_v": "f16", "n_gpu_layers": 99, "n_cpu_moe": 0, "split_mode": "layer", "main_gpu": 0, "no_kv_offload": false, "flash_attn": 1, "devices": "auto", "tensor_split": "0.00", "tensor_buft_overrides": "none", "load_mode": "auto", "lazy_mode": "auto", "embeddings": false, "no_op_offload": 0, "no_host": false, "repack": true, "fit_target": 0, "fit_min_ctx": 0, "n_prompt": 145, "n_gen": 0, "n_depth": 133, "test_time": "2026-11-15T14:16:21Z", "avg_ns": 52308392, "stddev_ns": 11654530, "avg_ts": 2859.841868, "stddev_ts": 493.088333, "samples_ns": [ 48551318, 73096600, 47111732, 46476229, 46306081 ],"samples_ts": [ 2986.53, 1983.68, 3077.79, 3119.87, 3131.34 ]}
+Collecting data...
+Generating '/tmp/nsys-report-5a58.qdstrm'
+
+[1/1] [0%                          ] nsys_p145_d133_fa1_node.nsys-rep
+[1/1] [0%                          ] nsys_p145_d133_fa1_node.nsys-rep
+[1/1] [=========44%                ] nsys_p145_d133_fa1_node.nsys-rep
+[1/1] [===========51%              ] nsys_p145_d133_fa1_node.nsys-rep
+[1/1] [========================100%] nsys_p145_d133_fa1_node.nsys-rep
+[1/1] [========================100%] nsys_p145_d133_fa1_node.nsys-rep
+Generated:
+	~/jetson-llm-kernels/results/2026-11-15/nsys_p145_d133_fa1_node.nsys-rep
