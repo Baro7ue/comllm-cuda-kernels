@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>矩阵乘练习 1–3 复习</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* 布局：单栏讲义。每节 = 一段话 + 一张能动手的图 + 一句结论。颜色固定编码：X 青绿、W 琥珀、Y 蓝、选中的线程 玫红 */
+  --bg:#f3f4f6;
+  --surface:#ffffff;
+  --ink:#1b2130;
+  --muted:#5b6474;
+  --line:#d7dbe3;
+  --x:#0a8174;
+  --w:#b86600;
+  --y:#3653cf;
+  --hot:#cf2f66;
+  --good:#2f8a3e;
+  --x-soft:color-mix(in srgb, var(--x) 16%, var(--surface));
+  --w-soft:color-mix(in srgb, var(--w) 16%, var(--surface));
+  --y-soft:color-mix(in srgb, var(--y) 14%, var(--surface));
+  --hot-soft:color-mix(in srgb, var(--hot) 18%, var(--surface));
+  --sunk:color-mix(in srgb, var(--ink) 5%, var(--surface));
+  --font-display:"Noto Serif SC","Songti SC","STSong",serif;
+  --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12161d; --surface:#1a1f28; --ink:#e6e9ef; --muted:#9ba4b3; --line:#2e3542;
+    --x:#38c2ae; --w:#f0a23a; --y:#8198ff; --hot:#ff6a9a; --good:#5fc46f;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12161d; --surface:#1a1f28; --ink:#e6e9ef; --muted:#9ba4b3; --line:#2e3542;
+  --x:#38c2ae; --w:#f0a23a; --y:#8198ff; --hot:#ff6a9a; --good:#5fc46f;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.75}
+main{max-width:920px;margin:0 auto;padding:32px 18px 80px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.35;text-wrap:balance;margin:0}
+h1{font-size:2rem}
+h2{font-size:1.45rem;margin-top:56px;padding-top:18px;border-top:1px solid var(--line)}
+h3{font-size:1.1rem;margin-top:28px;font-family:var(--font-body);font-weight:700}
+p{margin:12px 0;max-width:68ch}
+.lede{color:var(--muted);font-size:1.02rem}
+code,.mono{font-family:var(--font-mono);font-size:.88em}
+p code,li code,td code{background:var(--sunk);padding:1px 5px;border-radius:4px}
+pre{font-family:var(--font-mono);font-size:.84rem;line-height:1.6;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;margin:14px 0}
+.tag{display:inline-block;font-size:.75rem;padding:0 6px;border-radius:4px;border:1px solid var(--line);color:var(--muted);vertical-align:1px;margin:0 2px;white-space:nowrap}
+.tag.m{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+.tag.e{color:var(--w);border-color:color-mix(in srgb,var(--w) 45%,transparent)}
+.tag.g{color:var(--hot);border-color:color-mix(in srgb,var(--hot) 45%,transparent)}
+.cx{color:var(--x);font-weight:700}.cw{color:var(--w);font-weight:700}.cy{color:var(--y);font-weight:700}.ch{color:var(--hot);font-weight:700}
+nav.toc{margin:22px 0 0;display:flex;flex-wrap:wrap;gap:6px 8px}
+nav.toc a{font-size:.88rem;color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 12px}
+nav.toc a:hover,nav.toc a:focus-visible{border-color:var(--y);color:var(--y)}
+.table-wrap{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;font-size:.92rem;min-width:100%}
+th,td{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{font-weight:700;color:var(--muted);font-size:.84rem;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.takeaway{border-left:4px solid var(--y);background:var(--surface);padding:10px 16px;border-radius:0 8px 8px 0;margin:18px 0;max-width:72ch}
+.takeaway b{color:var(--y)}
+figure{margin:18px 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+figcaption{font-size:.86rem;color:var(--muted);margin-top:12px;max-width:72ch}
+.fig-title{font-weight:700;font-size:.95rem;margin-bottom:10px}
+button,select,input{font:inherit}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:7px;padding:4px 12px;cursor:pointer;font-size:.88rem}
+.btn:hover{border-color:var(--y)}
+.btn[aria-pressed="true"]{background:var(--y);border-color:var(--y);color:#fff}
+.btn:focus-visible,.mc:focus-visible,select:focus-visible,input:focus-visible,.tb:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:.88rem;margin-bottom:12px}
+.controls label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.controls output{font-family:var(--font-mono);min-width:3ch;display:inline-block}
+input[type=range]{accent-color:var(--y);width:150px}
+select{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:2px 6px}
+.readout{font-family:var(--font-mono);font-size:.84rem;background:var(--sunk);border-radius:8px;padding:10px 12px;line-height:1.7;white-space:pre-wrap}
+.readout .ok{color:var(--good);font-weight:600}.readout .bad{color:var(--hot);font-weight:600}
+
+/* 图：矩阵乘 */
+.mm-row{display:flex;flex-wrap:wrap;gap:18px 26px;align-items:flex-start}
+.mgrid-wrap{display:flex;flex-direction:column;gap:4px}
+.mgrid-title{font-size:.84rem;font-weight:700}
+.mgrid-title.x{color:var(--x)}.mgrid-title.w{color:var(--w)}.mgrid-title.y{color:var(--y)}
+.mgrid{--c:24px;display:grid;gap:2px;align-items:center}
+.mgrid .rl,.mgrid .cl{font-family:var(--font-mono);font-size:.68rem;color:var(--muted);text-align:center}
+.mgrid .rl{padding-right:4px;text-align:right}
+.mc{width:var(--c);height:var(--c);border-radius:4px;border:1px solid var(--line);background:var(--sunk);padding:0}
+.mx .mc{background:color-mix(in srgb,var(--x) 7%,var(--surface))}
+.mw .mc{background:color-mix(in srgb,var(--w) 7%,var(--surface))}
+.my .mc{background:color-mix(in srgb,var(--y) 7%,var(--surface));cursor:pointer}
+.mc.hx{background:var(--x);border-color:var(--x)}
+.mc.hw{background:var(--w);border-color:var(--w)}
+.mc.hy{background:var(--y);border-color:var(--y)}
+.formula{margin-top:12px;font-family:var(--font-mono);font-size:.84rem;overflow-x:auto;white-space:nowrap;padding:8px 10px;background:var(--sunk);border-radius:8px}
+
+/* 图：练习 1 */
+.e1-body{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}
+#e1-cv{width:400px;max-width:100%;height:auto;border-radius:6px;background:var(--sunk)}
+.e1-body .readout{flex:1 1 300px}
+
+/* 图：练习 2 */
+.strip{display:flex;flex-wrap:wrap;gap:4px 6px;margin:10px 0 4px}
+.grp{display:flex;gap:1px;padding:2px;border-radius:4px;border:1px solid var(--line)}
+.grp:nth-child(odd){background:color-mix(in srgb,var(--y) 9%,var(--surface))}
+.tk{width:9px;height:14px;border-radius:2px;background:var(--y)}
+.grp:nth-child(even) .tk{background:color-mix(in srgb,var(--y) 60%,var(--surface))}
+.tk.ghost{background:transparent!important;border:1px dashed var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:12px 0}
+.stat{background:var(--sunk);border-radius:8px;padding:8px 10px}
+.stat .k{font-size:.76rem;color:var(--muted)}
+.stat .v{font-family:var(--font-mono);font-size:1.05rem;font-variant-numeric:tabular-nums}
+svg.chart{width:100%;height:auto;display:block;color:var(--ink)}
+svg.chart text{font-family:var(--font-body);font-size:11px;fill:currentColor}
+svg.chart .ax{stroke:var(--line)}
+svg.chart .grid{stroke:var(--line);stroke-dasharray:2 3}
+svg.chart .muted{fill:var(--muted)}
+
+/* 图：练习 3 分步 */
+.e3-top{display:flex;flex-wrap:wrap;gap:16px 22px;align-items:flex-start}
+.tpick{display:grid;grid-template-columns:auto repeat(4,44px);gap:4px;align-items:center}
+.tpick .hd{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);text-align:center}
+.tb{height:34px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-family:var(--font-mono);font-size:.74rem;cursor:pointer;padding:0}
+.tb[aria-pressed="true"]{background:var(--hot);border-color:var(--hot);color:#fff}
+.tb.lx{box-shadow:inset 0 0 0 3px var(--x)}
+.tb.lw{box-shadow:inset 0 0 0 3px var(--w)}
+.tb.lx.lw{box-shadow:inset 0 0 0 3px var(--x),inset 0 0 0 6px var(--w)}
+.codebox{flex:1 1 360px;font-family:var(--font-mono);font-size:.78rem;line-height:1.75;background:var(--sunk);border-radius:8px;padding:8px 0;overflow-x:auto}
+.codebox div{padding:0 12px;white-space:pre;border-left:3px solid transparent}
+.codebox div.on{background:var(--hot-soft);border-left-color:var(--hot)}
+.codebox .ln{color:var(--muted);display:inline-block;width:2ch;margin-right:10px;text-align:right}
+.e3-mem{display:flex;flex-wrap:wrap;gap:16px 26px;margin-top:16px}
+.memgrid{display:grid;gap:2px;align-items:center}
+.memgrid .rl,.memgrid .cl{font-family:var(--font-mono);font-size:.64rem;color:var(--muted);text-align:center}
+.memgrid .rl{text-align:right;padding-right:4px;white-space:nowrap}
+.mm{width:22px;height:22px;border-radius:3px;border:1px solid var(--line)}
+.memx .mm{background:color-mix(in srgb,var(--x) 6%,var(--surface))}
+.memw .mm{background:color-mix(in srgb,var(--w) 6%,var(--surface))}
+.memx .mm.seg{background:var(--x-soft);border-color:color-mix(in srgb,var(--x) 50%,var(--line))}
+.memw .mm.seg{background:var(--w-soft);border-color:color-mix(in srgb,var(--w) 50%,var(--line))}
+.mm.done{background-image:linear-gradient(135deg,transparent 45%,var(--muted) 45%,var(--muted) 55%,transparent 55%);opacity:.75}
+.mm.hot{background:var(--hot)!important;border-color:var(--hot)!important;opacity:1}
+.e3-sh{display:flex;flex-wrap:wrap;gap:16px 26px;margin-top:16px;align-items:flex-start}
+.shgrid{display:grid;grid-template-columns:auto repeat(4,64px);gap:3px;align-items:center}
+.shgrid .rl,.shgrid .cl{font-family:var(--font-mono);font-size:.66rem;color:var(--muted);text-align:center}
+.shgrid .rl{text-align:right;padding-right:4px}
+.sc{height:42px;border-radius:5px;border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--font-mono);line-height:1.2}
+.sc .a{font-size:.66rem}.sc .b{font-size:.58rem;color:var(--muted)}
+.shx .sc{background:var(--x-soft)}
+.shw .sc{background:var(--w-soft)}
+.sc.row{outline:2px solid var(--ink);outline-offset:-2px}
+.sc.hot{background:var(--hot)!important;border-color:var(--hot);color:#fff}
+.sc.hot .b{color:#fff}
+.ygrid{display:grid;grid-template-columns:auto repeat(4,40px);gap:3px;align-items:center}
+.ygrid .rl,.ygrid .cl{font-family:var(--font-mono);font-size:.62rem;color:var(--muted);text-align:center}
+.yc{height:30px;border-radius:4px;border:1px solid var(--line);background:color-mix(in srgb,var(--y) 6%,var(--surface))}
+.yc.me{outline:2px solid var(--hot);outline-offset:-2px}
+.yc.wr{background:var(--y)}
+.say{margin-top:16px;background:var(--sunk);border-radius:8px;padding:10px 14px;font-size:.92rem;min-height:4.5em}
+.stepbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.stepbar .count{font-family:var(--font-mono);font-size:.82rem;color:var(--muted);margin-left:auto}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.78rem;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+
+/* 图：bank */
+.bk-wrap{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.bkgrid{display:grid;grid-template-columns:auto repeat(16,21px);gap:1px;align-items:center}
+.bkgrid .rl,.bkgrid .cl{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);text-align:center}
+.bkgrid .rl{text-align:right;padding-right:3px}
+.bc{height:21px;border-radius:2px;font-family:var(--font-mono);font-size:.52rem;color:var(--muted);display:flex;align-items:center;justify-content:center;background:var(--sunk)}
+.bc.half{background:color-mix(in srgb,var(--w) 7%,var(--surface))}
+.bc.acc{background:var(--hot);color:#fff;font-weight:600}
+.bk-side{flex:1 1 300px;min-width:260px}
+
+@media (max-width:520px){
+  h1{font-size:1.6rem}
+  .mgrid{--c:18px}
+  .shgrid{grid-template-columns:auto repeat(4,54px)}
+  .tpick{grid-template-columns:auto repeat(4,38px)}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+details{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 14px;margin:10px 0}
+details summary{cursor:pointer;font-weight:500}
+details[open] summary{margin-bottom:6px}
+details .ans{border-top:1px dashed var(--line);padding-top:8px;font-size:.93rem}
+footer{margin-top:56px;font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+footer code{font-size:.8rem}
+</style>
+</head>
+<body>
+<main>
+
+<h1>矩阵乘练习 1–3 复习</h1>
+<p class="lede">从"一个线程算一格"到"一个线程块合作搬数据"，把三天写的三个内核串起来。每节配一张能动手的图，先动手再读结论。数字的来源都标了：<span class="tag m">实测</span> 板子上量的，<span class="tag e">估算</span> 纸面算的，<span class="tag g">推测</span> 能解释数据但没单独验证。</p>
+
+<nav class="toc" aria-label="目录">
+  <a href="#what">1 要算什么</a>
+  <a href="#mainline">2 一条主线</a>
+  <a href="#ex1">3 练习 1</a>
+  <a href="#ex2">4 练习 2</a>
+  <a href="#ex3">5 练习 3</a>
+  <a href="#bank">6 练习 3 为什么慢</a>
+  <a href="#all">7 全部结果</a>
+  <a href="#mistakes">8 踩过的坑</a>
+  <a href="#quiz">9 回忆题</a>
+</nav>
+
+<!-- ============================================================ -->
+<h2 id="what">1　要算的东西：Y = X · Wᵀ</h2>
+
+<p>三块数据，大小照的是 Qwen2.5-0.5B 每层前馈网络里的 gate 矩阵乘（896 → 4864）。练习里的数是测试框架随机造的，只用来检查"算得对不对、快不快"。</p>
+
+<div class="table-wrap"><table>
+<thead><tr><th>名字</th><th>形状</th><th>是什么</th><th class="num">大小</th></tr></thead>
+<tbody>
+<tr><td class="cx">X</td><td class="mono">145 × 896</td><td>输入：145 个 token，每个 896 个数。上一步算出来的数据，每次请求都不同</td><td class="num">0.52 MB</td></tr>
+<tr><td class="cw">W</td><td class="mono">4864 × 896</td><td>权重：模型参数，训练时定好，推理时只读。每一行是"算出一个输出要用的 896 个权重"</td><td class="num">17.4 MB</td></tr>
+<tr><td class="cy">Y</td><td class="mono">145 × 4864</td><td>输出：要求的东西。每个 token 得到 4864 个数</td><td class="num">2.82 MB</td></tr>
+</tbody></table></div>
+
+<figure>
+  <div class="fig-title">点 Y 里任意一格，看它用到哪些数</div>
+  <div class="mm-row" id="mm-grids"></div>
+  <div class="formula" id="mm-formula"></div>
+  <figcaption>图里缩小成 6 个 token、8 个特征、5 个输出。Y 的一格 = X 的一整行（这个 token）和 W 的一整行（这个输出）对应位置相乘，再全部加起来。真实大小下每格要加 896 项，一共 145 × 4864 ≈ 70 万格。</figcaption>
+</figure>
+
+<p>内存里二维表是一长条，一行接一行。所以第 n 行第 k 个数在 <code>X[n*K + k]</code>，W 的第 m 行从 <code>W + m*K</code> 开始，Y 的第 n 行第 m 个在 <code>Y[n*M + m]</code>。规律只有一条：<b>换行就乘上每行的长度</b>。X、W 每行 K = 896 个，Y 每行 M = 4864 个。</p>
+
+<h3>本页的行和列</h3>
+<p>下面说"行""列"时都带上是哪个矩阵的。最常用的是 Y：</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Y 的</th><th>编号</th><th>代表</th><th>CUDA 里管它的</th></tr></thead>
+<tbody>
+<tr><td>行（共 145 行）</td><td><code>n</code></td><td>token</td><td><code>blockIdx.y</code>、<code>threadIdx.y</code>（ty）</td></tr>
+<tr><td>列（共 4864 列）</td><td><code>m</code></td><td>输出</td><td><code>blockIdx.x</code>、<code>threadIdx.x</code>（tx）</td></tr>
+</tbody></table></div>
+<p>一句话记：<b>x 管列，y 管行</b>。顺序容易乱：矩阵先写行再写列，<code>Y[n][m]</code> 是 Y[行][列]；CUDA 的 <code>dim3(x, y)</code> 却先写列再写行，所以 <code>grid(19, 145)</code> 是"19 个列块、145 个行块"。还有一处：W 的第 m <b>行</b>，算出来的是 Y 的第 m <b>列</b>，因为 Y = X · Wᵀ 里转置把 W 的行变成了列。</p>
+
+<div class="takeaway"><b>出发点：</b>W 里同一行，145 个 token 每个都要用一次。读一次，能用 145 次。三个练习都在想办法兑现这句话。</div>
+
+<!-- ============================================================ -->
+<h2 id="mainline">2　一条主线：同一个权重，从内存读了几遍</h2>
+
+<figure>
+  <svg class="chart" viewBox="0 0 780 320" role="img" aria-label="同一个权重 W[m][k] 在三个练习里从内存读的次数：练习 1 读 145 次，练习 2 读 5 次放进寄存器连用 32 次，练习 3 读 10 次放进共享内存给 16 个线程用">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+    </defs>
+    <!-- 列 1 -->
+    <text x="130" y="22" text-anchor="middle" style="font-weight:700;font-size:13px">练习 1：每线程 1 格</text>
+    <rect x="40" y="36" width="180" height="40" rx="7" fill="var(--w-soft)" stroke="var(--w)"/>
+    <text x="130" y="61" text-anchor="middle">内存里的一个权重 W[m][k]</text>
+    <g stroke="currentColor" stroke-width="1.2" marker-end="url(#arr)" fill="none">
+      <line x1="130" y1="76" x2="52" y2="232"/><line x1="130" y1="76" x2="86" y2="232"/><line x1="130" y1="76" x2="120" y2="232"/>
+      <line x1="130" y1="76" x2="154" y2="232"/><line x1="130" y1="76" x2="188" y2="232"/>
+    </g>
+    <rect x="62" y="132" width="136" height="24" rx="5" fill="var(--surface)"/>
+    <text x="130" y="149" text-anchor="middle" style="font-weight:700;fill:var(--hot)">从内存读 145 次</text>
+    <g fill="var(--y)"><circle cx="52" cy="244" r="8"/><circle cx="86" cy="244" r="8"/><circle cx="120" cy="244" r="8"/><circle cx="154" cy="244" r="8"/><circle cx="188" cy="244" r="8"/></g>
+    <text x="214" y="248">…</text>
+    <text x="130" y="282" text-anchor="middle">145 个线程（145 个 token）</text>
+    <text x="130" y="300" text-anchor="middle" class="muted">各自去内存读一遍，各用 1 次</text>
+
+    <!-- 列 2 -->
+    <text x="390" y="22" text-anchor="middle" style="font-weight:700;font-size:13px">练习 2：每线程 32 个 token</text>
+    <rect x="300" y="36" width="180" height="40" rx="7" fill="var(--w-soft)" stroke="var(--w)"/>
+    <text x="390" y="61" text-anchor="middle">内存里的一个权重 W[m][k]</text>
+    <line x1="340" y1="76" x2="340" y2="124" stroke="currentColor" stroke-width="1.2" marker-end="url(#arr)"/>
+    <text x="350" y="104" style="font-weight:700;fill:var(--hot)">从内存读 5 次</text>
+    <text x="350" y="118" class="muted">5 个行块各 1 次</text>
+    <rect x="300" y="128" width="180" height="40" rx="7" fill="var(--sunk)" stroke="currentColor"/>
+    <text x="390" y="153" text-anchor="middle">寄存器 wk（线程自己的）</text>
+    <line x1="390" y1="168" x2="390" y2="226" stroke="currentColor" stroke-width="1.2" marker-end="url(#arr)"/>
+    <text x="400" y="200" class="muted">连用 32 次</text>
+    <g fill="var(--y)"><rect x="318" y="234" width="14" height="20" rx="2"/><rect x="336" y="234" width="14" height="20" rx="2"/><rect x="354" y="234" width="14" height="20" rx="2"/><rect x="372" y="234" width="14" height="20" rx="2"/><rect x="390" y="234" width="14" height="20" rx="2"/><rect x="408" y="234" width="14" height="20" rx="2"/><rect x="426" y="234" width="14" height="20" rx="2"/></g>
+    <text x="446" y="249">…</text>
+    <text x="390" y="282" text-anchor="middle">1 个线程，32 个累加器</text>
+    <text x="390" y="300" text-anchor="middle" class="muted">一次读进来，给 32 个 token 各用 1 次</text>
+
+    <!-- 列 3 -->
+    <text x="650" y="22" text-anchor="middle" style="font-weight:700;font-size:13px">练习 3：共享内存</text>
+    <rect x="560" y="36" width="180" height="40" rx="7" fill="var(--w-soft)" stroke="var(--w)"/>
+    <text x="650" y="61" text-anchor="middle">内存里的一个权重 W[m][k]</text>
+    <line x1="600" y1="76" x2="600" y2="124" stroke="currentColor" stroke-width="1.2" marker-end="url(#arr)"/>
+    <text x="610" y="104" style="font-weight:700;fill:var(--hot)">从内存读 10 次</text>
+    <text x="610" y="118" class="muted">10 个行块各 1 次</text>
+    <rect x="560" y="128" width="180" height="40" rx="7" fill="var(--sunk)" stroke="currentColor"/>
+    <text x="650" y="153" text-anchor="middle">共享内存 sW（全块共用）</text>
+    <g stroke="currentColor" stroke-width="1.2" marker-end="url(#arr)" fill="none">
+      <line x1="650" y1="168" x2="580" y2="232"/><line x1="650" y1="168" x2="614" y2="232"/><line x1="650" y1="168" x2="648" y2="232"/><line x1="650" y1="168" x2="682" y2="232"/><line x1="650" y1="168" x2="716" y2="232"/>
+    </g>
+    <g fill="var(--y)"><circle cx="580" cy="244" r="8"/><circle cx="614" cy="244" r="8"/><circle cx="648" cy="244" r="8"/><circle cx="682" cy="244" r="8"/><circle cx="716" cy="244" r="8"/></g>
+    <text x="740" y="248">…</text>
+    <text x="650" y="282" text-anchor="middle">块里 16 个线程（16 个 token）</text>
+    <text x="650" y="300" text-anchor="middle" class="muted">从共享内存各取 1 次</text>
+  </svg>
+  <figcaption>同一个权重数从内存读的次数：145 → 5 → 10，不计二级缓存 <span class="tag e">估算</span>。练习 2 把复用放在线程自己的寄存器里，练习 3 把复用放在全块共用的共享内存里。练习 3 读得比练习 2 多，这一点后面会用到。</figcaption>
+</figure>
+
+<p>三种存放数据的地方，越往下越快、越小、能用它的人越少：</p>
+<div class="table-wrap"><table>
+<thead><tr><th>位置</th><th>代码里的样子</th><th>谁能用</th><th>这块板子上</th></tr></thead>
+<tbody>
+<tr><td>内存</td><td><code>X</code>、<code>W</code>、<code>Y</code></td><td>所有线程</td><td>7.91 GB，有效带宽 61.1 GB/s <span class="tag m">实测</span></td></tr>
+<tr><td>共享内存</td><td><code>__shared__ float sW[16][16]</code></td><td>同一个线程块</td><td>每个 SM 164 KB，每块默认最多 48 KB <span class="tag m">实测</span></td></tr>
+<tr><td>寄存器</td><td><code>acc</code>、<code>wk</code>、<code>m</code> 这些局部变量</td><td>只有这个线程</td><td>每个 SM 65536 个 <span class="tag m">实测</span></td></tr>
+</tbody></table></div>
+
+<!-- ============================================================ -->
+<h2 id="ex1">3　练习 1：每个线程算 Y 的一格</h2>
+
+<p><b>分工：</b>Y 有 145 × 4864 ≈ 70 万格，就开 70 万个线程，一人一格。一个块是 256 个线程，盖住 Y 的 1 行 × 256 列。Y 的列方向要 4864 ÷ 256 = 19 块，行方向要 145 块，所以 <code>grid(19, 145)</code>：先写列块数，再写行块数。</p>
+
+<pre>__global__ void my_v1_kernel(const float* X, const float* W, float* Y, int N, int K, int M) {
+    const int m = blockIdx.x * blockDim.x + threadIdx.x;   // Y 的第几列（输出）
+    const int n = blockIdx.y;                              // Y 的第几行（token）
+    if (m &gt;= M) return;                                    // 多出来的线程没活干
+    const float* x = X + n * K;                            // X 的第 n 行
+    const float* w = W + m * K;                            // W 的第 m 行
+    float acc = 0.0f;
+    for (int k = 0; k &lt; K; ++k) acc += x[k] * w[k];
+    Y[n * M + m] = acc;
+}
+// 发起：grid(⌈M / 256⌉, N)，每块 256 个线程</pre>
+
+<figure>
+  <div class="fig-title">拖动三个序号，看一个线程认领哪一格</div>
+  <div class="controls">
+    <label for="e1-M">M（输出个数）
+      <select id="e1-M"><option value="4864">4864（真实大小）</option><option value="5000">5000（不是 256 的倍数）</option></select></label>
+    <label for="e1-bx">blockIdx.x <input type="range" id="e1-bx" min="0" max="18" value="2"><output id="e1-bxv">2</output></label>
+    <label for="e1-tx">threadIdx.x <input type="range" id="e1-tx" min="0" max="255" value="10"><output id="e1-txv">10</output></label>
+    <label for="e1-by">blockIdx.y <input type="range" id="e1-by" min="0" max="144" value="6"><output id="e1-byv">6</output></label>
+  </div>
+  <div class="e1-body">
+    <canvas id="e1-cv" width="400" height="324" role="img" aria-label="Y 上的线程块示意：每个小格是一个块，盖住 Y 的 1 行 × 256 列；左右是 blockIdx.x（第几个列块），上下是 blockIdx.y（第几行），选中的块标成玫红"></canvas>
+    <div class="readout" id="e1-out"></div>
+  </div>
+  <figcaption>左图画的是 Y。每个小格是一个线程块，盖住 Y 的 1 行 × 256 列：从左到右数是 blockIdx.x（第几个列块），从上到下数是 blockIdx.y（Y 的第几行，0–144）。把 M 换成 5000，最右边的列块会出现斜线部分：那些线程的 m ≥ M，没有对应的格子，所以必须 return。你代码里这行现在是注释掉的，在 4864 下能过只是因为 4864 = 19 × 256。</figcaption>
+</figure>
+
+<p><b>线程数怎么来：</b>先定"一个线程负责什么"，线程总数等于活的份数。每块 256 个是手选的：要是 32 的倍数（一个 warp 是 32 个线程），不能超过 1024。v1 里同块的线程互不配合，换成 128 或 512 速度差别应该很小，这一点没测过。</p>
+
+<p><b>结果：</b>通过，80.3 ms <span class="tag m">实测</span>。</p>
+<p><b>为什么慢：</b>算 Y[0][m] 的线程把 W 第 m 行读了一遍，算 Y[1][m] 的是另一个线程，又读了一遍。145 个 token 就读 145 遍，合计约 145 × 17.4 MB ≈ 2.5 GB，按 61.1 GB/s 光搬这些就要约 41 ms <span class="tag e">估算</span>。另外相邻线程读的是 W 里相邻两行，地址隔着 896 × 4 = 3.6 KB，硬件没法把一组线程的读取合成一整段。</p>
+
+<!-- ============================================================ -->
+<h2 id="ex2">4　练习 2：一个线程算同一个输出的 T 个 token</h2>
+
+<p><b>分工：</b>一个线程负责"第 m 个输出、连续 T 个 token"，手里拿 T 个累加器。每读进一个权重，就和 T 个 token 的输入各乘一次。列方向和练习 1 一样，每块 256 列；行方向从每块 1 行，变成每块 T 行。所以一个块盖住 Y 的 T 行 × 256 列，<code>grid(19, ⌈145 ÷ T⌉)</code>。</p>
+
+<pre>const int n0  = TOKENS_PER_THREAD * blockIdx.y;            // 我这个行块的第一行（token）
+const int cnt = min(TOKENS_PER_THREAD, N - n0);           // 最后一个行块可能不满 T 行
+float acc[TOKENS_PER_THREAD] = {0.0f};
+for (int i = 0; i &lt; K; ++i)
+    for (int t = 0; t &lt; cnt; ++t)
+        acc[t] += x[K*t + i] * w[i];                        // 跳过 t 整行，再数 i 个
+for (int t = 0; t &lt; cnt; ++t) Y[(n0 + t)*M + m] = acc[t];</pre>
+
+<figure>
+  <div class="fig-title">选每个线程负责几个 token，看 145 个 token 怎么分组</div>
+  <div class="controls" id="e2-btns" role="group" aria-label="每线程 token 数"></div>
+  <div class="strip" id="e2-strip" aria-label="Y 一列里 145 行的分组"></div>
+  <div class="legend"><span><i style="background:var(--y)"></i>真实的 token</span><span><i style="border:1px dashed var(--muted)"></i>不存在的位置（cnt 挡住）</span><span>图里只画了 Y 的第 m 列：145 行按 T 行一组，每个框 = 一个线程。Y 的 4864 列各有这样一列</span></div>
+  <div class="stats" id="e2-stats"></div>
+  <svg class="chart" id="e2-chart" viewBox="0 0 560 250" role="img" aria-label="每线程 token 数与实测时间：1 个 80.3 ms，4 个 22.6 ms，8 个 14.7 ms，16 个 11.2 ms，32 个 11.6 ms"></svg>
+  <figcaption>实线点是实测时间，1 个是练习 1，4 个和 32 个是你写的练习 2，8 个和 16 个是参考 v2。虚线是用 4、8、16 三点拟合的"7.4 + 59 ÷ T"，它预测 32 个时约 9.2 ms，实测是 11.6 ms，预测没应验。</figcaption>
+</figure>
+
+<p><b>边界：</b>145 = 36 × 4 + 1，T = 4 时最后一个行块只有 1 行是真的 token，另外 3 行用 <code>cnt</code> 挡住，不读也不写。</p>
+
+<p><b>读到的东西：</b>T 越大，W 从内存读的遍数越少，时间先快速下降，到 16 左右就不降了。T = 32 时 W 只读 5 遍，约 87 MB，按带宽算约 1.4 ms <span class="tag e">估算</span>，实测却是 11.6 ms。说明这时 W 的流量已经不是瓶颈，时间花在别处。可能是同一个行块里负责 Y 4864 列的 4864 个线程，把同样的 T 行 X 各读了一遍，也可能是 32 个累加器放不进寄存器 <span class="tag g">推测</span>。</p>
+
+<div class="takeaway"><b>练习 2 的一句话：</b>把一个权重读进寄存器，连用 T 次。三个点拟合出来的模型，外推一档就错了，所以每个结论都要量过才算数。</div>
+
+<!-- ============================================================ -->
+<h2 id="ex3">5　练习 3：一个线程块合作算 Y 的一个 16 × 16 小块</h2>
+
+<p><b>为什么要它：</b>练习 2 里同一个行块的线程负责 Y 的同样几行（同样的 token），读的 X 一模一样，每个线程各读一遍。共享内存处理的就是这种重复：一组线程把数据从内存取一次，放到组里人人能拿的地方。</p>
+
+<p><b>分工：</b>一个块是 16 × 16 = 256 个线程，负责 Y 的一个 16 × 16 小块，每个线程仍然算一格。896 个特征切成 56 段，每段 16 个。每一段做四件事：全块一起搬、等齐、各自算、再等齐。Y 的列方向要 4864 ÷ 16 = 304 块，行方向要 ⌈145 ÷ 16⌉ = 10 块，<code>grid(304, 10)</code>。块里 tx 管 Y 的列（输出 m），ty 管 Y 的行（token n）。</p>
+
+<figure>
+  <div class="fig-title">选一个线程，一步一步看它搬什么、算什么</div>
+  <p style="margin:0 0 12px;font-size:.88rem;color:var(--muted)">为了看得清，图里缩小成 TILE = 4（一块 4 × 4 = 16 个线程）、K = 12（3 段）。块的位置是 blockIdx.x = 2（第 2 个列块）、blockIdx.y = 1（第 1 个行块），所以这块管 Y 的第 8–11 列（m0 = 2 × 4 = 8）、第 4–7 行（n0 = 1 × 4 = 4）。代码和真实的 TILE = 16 完全一样。</p>
+  <div class="e3-top">
+    <div>
+      <div style="font-size:.82rem;font-weight:700;margin-bottom:6px">① 选线程：tx 管 Y 的列，ty 管 Y 的行</div>
+      <div class="tpick" id="e3-pick"></div>
+      <div id="e3-who" style="font-family:var(--font-mono);font-size:.78rem;margin-top:8px;max-width:240px"></div>
+    </div>
+    <div class="codebox" id="e3-code" aria-label="练习 3 的核心代码，当前步骤所在的行高亮"></div>
+  </div>
+  <div class="e3-mem">
+    <div><div class="mgrid-title x">内存里的 X（第 4–7 行 = Y 的第 4–7 行 × 12 个特征）</div><div class="memgrid memx" id="e3-mx"></div></div>
+    <div><div class="mgrid-title w">内存里的 W（第 8–11 行 = Y 的第 8–11 列 × 12 个特征）</div><div class="memgrid memw" id="e3-mw"></div></div>
+  </div>
+  <div class="e3-sh">
+    <div><div class="mgrid-title x">共享内存 sX[块内 token][段内特征]</div><div class="shgrid shx" id="e3-sx"></div></div>
+    <div><div class="mgrid-title w">共享内存 sW[块内输出][段内特征]</div><div class="shgrid shw" id="e3-sw"></div></div>
+    <div><div class="mgrid-title y">Y 的这一小块</div><div class="ygrid" id="e3-y"></div></div>
+  </div>
+  <div class="say" id="e3-say" aria-live="polite"></div>
+  <div class="stepbar">
+    <button class="btn" id="e3-prev" type="button">上一步</button>
+    <button class="btn" id="e3-next" type="button">下一步</button>
+    <button class="btn" id="e3-play" type="button" aria-pressed="false">自动播放</button>
+    <button class="btn" id="e3-reset" type="button">从头开始</button>
+    <span class="count" id="e3-count"></span>
+  </div>
+  <div class="legend">
+    <span><i style="background:var(--hot)"></i>选中的线程此刻碰的数</span>
+    <span><i style="background:var(--x-soft);border:1px solid var(--x)"></i>当前这一段</span>
+    <span><i style="background-image:linear-gradient(135deg,transparent 45%,var(--muted) 45%,var(--muted) 55%,transparent 55%);border:1px solid var(--line)"></i>已经加进 acc 的特征</span>
+    <span><i style="box-shadow:inset 0 0 0 3px var(--w)"></i>搬了它要用的那行 sW 的线程</span>
+    <span><i style="box-shadow:inset 0 0 0 3px var(--x)"></i>搬了它要用的那行 sX 的线程</span>
+  </div>
+  <figcaption>默认选的是 (tx = 1, ty = 2)：它算 Y[6][9]，可"搬"那一步它搬的 W 是输出 10 的。算的时候它用 sW 第 1 行，那一行是 ty = 1 的 4 个线程搬的。换几个线程点一点，看搬的和用的怎么对不上。</figcaption>
+</figure>
+
+<h3>三条规矩</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>规矩</th><th>为什么</th></tr></thead>
+<tbody>
+<tr><td><b>大表用真实编号，小表用块内序号</b></td><td>X、W、Y 在内存里，用 n、m、k0 + tx；sX、sW 只有 16 × 16，只认 tx、ty、kk</td></tr>
+<tr><td><b>搬的和用的不是同一行</b></td><td>搬是全块分工：每格有且只有一个人搬，按 ty 定行、tx 定列。算是各取所需：线程要的 sW 行是 tx。tx 相邻的线程读 W 同一行里相邻的数，地址连着，硬件能合并</td></tr>
+<tr><td><b>越界的线程不能提前 return</b></td><td>别的线程要用它搬的数（越界就放 0），而且它走了，别人在 <code>__syncthreads()</code> 等不到它。它只是最后不写 Y</td></tr>
+</tbody></table></div>
+
+<h3>变量名的规律</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>样子</th><th>含义</th><th>例子</th></tr></thead>
+<tbody>
+<tr><td>带 <code>0</code></td><td>起点：这个块、这一段的第一个</td><td><code>n0</code>、<code>m0</code>、<code>k0</code></td></tr>
+<tr><td><code>t</code> 开头，或字母重复</td><td>块内、段内第几个（0 到 15）</td><td><code>tx</code>、<code>ty</code>、<code>kk</code></td></tr>
+<tr><td>单个字母</td><td>在整张大表里的真实编号</td><td><code>n</code>、<code>m</code></td></tr>
+</tbody></table></div>
+<p>它们的关系永远是：<b>真实编号 = 起点 + 局部序号</b>。<code>n = n0 + ty</code>，<code>m = m0 + tx</code>，特征 = <code>k0 + kk</code>。写下标前先问一句"这是大表还是小表"。</p>
+
+<p><b>结果：</b>通过，13.66 ms，和参考的朴素版 13.65 ms 一样 <span class="tag m">实测</span>。用了共享内存，反而比练习 2 慢。</p>
+
+<!-- ============================================================ -->
+<h2 id="bank">6　练习 3 为什么反而慢：共享内存的取数窗口</h2>
+
+<p>对比一下：参考 v2（每线程 16 个 token）的 W 也是读 10 遍，11.2 ms；练习 3 是 13.7 ms。只把 <code>sW</code> 的两个下标对调的版本是 6.7 ms <span class="tag m">实测</span>。从内存读的量一样，差别在共享内存里怎么取。</p>
+
+<p>共享内存有 32 个取数窗口，叫 bank。第几个窗口 = 位置 ÷ 32 的余数（位置按 float 数）。一组 32 个线程（一个 warp）同时取数时，落在同一个窗口里的不同位置要排队，同一个位置可以共用。16 × 16 的块里，一个 warp 是块里相邻的两行线程，对应 Y 小块的两行：ty 两个值，每行 tx 从 0 到 15。</p>
+
+<figure>
+  <div class="fig-title">看一个 warp（32 个线程）同时取 sW 时撞不撞窗口</div>
+  <div class="controls">
+    <span role="group" aria-label="sW 的存法" style="display:flex;gap:6px"><button class="btn" type="button" data-lay="naive" aria-pressed="true">朴素：sW[行=输出][列=特征]</button><button class="btn" type="button" data-lay="trans" aria-pressed="false">转置：sW[行=特征][列=输出]</button></span>
+    <span role="group" aria-label="读还是写" style="display:flex;gap:6px"><button class="btn" type="button" data-op="read" aria-pressed="true">算的时候读</button><button class="btn" type="button" data-op="write" aria-pressed="false">搬的时候写</button></span>
+    <label for="bk-kk">kk <input type="range" id="bk-kk" min="0" max="15" value="0"><output id="bk-kkv">0</output></label>
+  </div>
+  <div class="bk-wrap">
+    <div>
+      <div class="mgrid-title w" id="bk-title" style="margin-bottom:4px">sW 的 256 个格子，格里的数是它的窗口号</div>
+      <div class="bkgrid" id="bk-grid"></div>
+    </div>
+    <div class="bk-side">
+      <div class="readout" id="bk-out"></div>
+      <svg class="chart" id="bk-bars" viewBox="0 0 340 150" role="img" aria-label="32 个窗口各要排几个不同位置"></svg>
+    </div>
+  </div>
+  <figcaption>玫红格是这个 warp 此刻要的位置。朴素存法下，算的时候读 <code>sW[tx][kk]</code>，位置 = tx × 16 + kk：16 个位置只落在 2 个窗口上，每个窗口排 8 个。这一行每个线程要执行 896 次。转置后读 <code>sW[kk][tx]</code>，位置连着，落在 16 个不同窗口上，1 轮取完。代价是搬的时候写成 <code>sW[tx][ty]</code> 会撞，但写每段只有 1 次，读每段有 16 次。</figcaption>
+</figure>
+
+<div class="table-wrap"><table>
+<thead><tr><th>存法</th><th class="num">读（每段 16 次）</th><th class="num">写（每段 1 次）</th><th class="num">实测时间</th></tr></thead>
+<tbody>
+<tr><td>朴素 <code>sW[ty][tx]</code> 写，<code>sW[tx][kk]</code> 读</td><td class="num">排 8 轮</td><td class="num">1 轮</td><td class="num">13.7 ms</td></tr>
+<tr><td>转置 <code>sW[tx][ty]</code> 写，<code>sW[kk][tx]</code> 读</td><td class="num">1 轮</td><td class="num">排 8 轮</td><td class="num">6.7 ms</td></tr>
+</tbody></table></div>
+<p>轮数是按硬件规则算出来的，时间是实测。"慢在 bank 冲突"这个归因还没有用分析工具量过 <span class="tag g">推测</span>。<code>sX[ty][kk]</code> 没有这个问题：一个 warp 里 ty 只有两个值，大家要的是同样的两个位置，可以共用。</p>
+
+<div class="takeaway"><b>练习 3 的一句话：</b>用了共享内存不等于变快。数据在共享内存里怎么摆，决定一组线程取数时要不要排队。</div>
+
+<!-- ============================================================ -->
+<h2 id="all">7　到现在为止的全部结果</h2>
+
+<figure>
+  <div class="fig-title">同一个矩阵乘（145 × 896 → 4864，float），每个版本的中位数时间</div>
+  <svg class="chart" id="all-chart" viewBox="0 0 760 368" role="img" aria-label="各版本实测时间对数坐标横条图"></svg>
+  <figcaption>横轴是对数刻度，每格是 10 倍。蓝色是你写的，灰色是参考答案，虚线是两条参照线。全部版本都通过了正确性检查，最大误差 ÷ S 都是 2.75 × 10⁻⁷，上界 5.3 × 10⁻⁵。2026-11-18 同一次运行，各 20 次 <span class="tag m">实测</span>。练习 2 这次设的是每线程 32 个 token。</figcaption>
+</figure>
+
+<p>正确性的判断方法：CPU 上用 double 算准确值，再对每个输出算 S = 896 项绝对值之和。float 累加 K 项的最坏误差是 K × 2⁻²⁴ × S ≈ 5.3 × 10⁻⁵ × S。70 万个输出里有一个超过这个界，就不是舍入能解释的，一定是程序写错了。</p>
+
+<!-- ============================================================ -->
+<h2 id="mistakes">8　你写的时候出过的错</h2>
+<p>这些都在 <code>docs/day02.md</code> 里记着。复习时最值得看的就是这张表。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>写成了</th><th>应该是</th><th>道理</th></tr></thead>
+<tbody>
+<tr><td><code>sX[ty][tx] = X + n*K + (k0+tx)</code></td><td><code>X[n*K + (k0+tx)]</code></td><td>加法得到的是地址，方括号才把数取出来</td></tr>
+<tr><td>搬 W 时行号用 <code>m</code></td><td><code>m0 + ty</code></td><td><code>m = m0 + tx</code>，行和列都由 tx 决定，只搬到 16 个不同的数。搬满 16 × 16 要两个独立的序号</td></tr>
+<tr><td><code>kk &lt; TILE - 1</code></td><td><code>kk &lt; TILE</code></td><td><code>&lt;</code> 后面写个数，不用减 1。练习 2 的 <code>t &lt; cnt - 1</code> 是同一个错</td></tr>
+<tr><td><code>sX[n][kk]</code>、<code>sX[n0][kk]</code></td><td><code>sX[ty][kk]</code></td><td>小表只有 16 行，只认块内序号</td></tr>
+<tr><td><code>Y[n][m] = acc</code> 写在循环里</td><td>循环外 <code>if (n &lt; N &amp;&amp; m &lt; M) Y[n*M + m] = acc;</code></td><td>56 段算完才写；Y 是一长条，只能用一维下标；越界线程不写</td></tr>
+<tr><td>块数的除数用 256 和 <code>TOKENS_PER_THREAD</code></td><td>都用 <code>TILE</code></td><td>除数是"一个块在这个方向上盖多少个"，练习 3 横竖都是 16</td></tr>
+<tr><td>Y[64][47]</td><td>Y[47][64]</td><td>Y 的写法是 Y[n][m]，token 在前</td></tr>
+<tr><td>练习 1 里 <code>if (m &gt;= M) return;</code> 注释掉了</td><td>保留</td><td>M = 4864 时能过是巧合，M = 5000 时多出来的线程会越界读写</td></tr>
+</tbody></table></div>
+
+<!-- ============================================================ -->
+<h2 id="quiz">9　回忆题</h2>
+<p>先不看代码，凭记忆答，答完再展开对答案。前四题按真实的 TILE = 16。</p>
+
+<details><summary>1　线程 (tx = 3, ty = 5)，所在块 blockIdx.x = 2、blockIdx.y = 1，现在 k0 = 32。它负责 Y 的哪一格？这一轮搬哪两个数？</summary>
+<div class="ans">m0 = 2 × 16 = 32，n0 = 1 × 16 = 16；m = 32 + 3 = 35，n = 16 + 5 = 21，负责 Y 的第 21 行第 35 列，即 <b>Y[21][35]</b>。<br>
+搬 <code>sX[5][3] ← X[21][35]</code>（token n 的第 k0 + tx = 35 个特征）；<br>
+搬 <code>sW[5][3] ← W[37][35]</code>（输出 m0 + ty = 37 的第 35 个权重）。注意它搬的是输出 37，不是自己的输出 35。</div></details>
+
+<details><summary>2　接上题，它算的时候读 sW 的哪一行？那一行是哪些线程搬进来的？</summary>
+<div class="ans">读 sW 第 tx = 3 行，即 <code>sW[3][kk]</code> = W[35][32 + kk]。这一行是 ty = 3 的那 16 个线程（tx = 0 到 15）搬的。</div></details>
+
+<details><summary>3　第二个 <code>__syncthreads()</code> 去掉会出什么问题？</summary>
+<div class="ans">快的线程会进入下一段，把新数据写进 sX、sW，而慢的线程还在用旧数据算这一段，结果就错了。这种错可能时有时无，不一定每次都能复现，所以更难查。</div></details>
+
+<details><summary>4　M = 5000 时练习 3 在 Y 的列方向要几块？多出来的线程做什么，和练习 1 有什么不同？</summary>
+<div class="ans">⌈5000 ÷ 16⌉ = 313 块。最后一个列块 m0 = 4992，盖住 Y 的第 4992–5007 列，tx ≥ 8 的线程 m ≥ 5000。<br>
+它们照样搬数：sX 那一格是真实的 X；sW 那一格看 m0 + ty，ty &lt; 8 时搬真实的 W，ty ≥ 8 时放 0。它们照样走到两个 <code>__syncthreads()</code>，只是最后不写 Y。练习 1 里这种线程一开始就 return。</div></details>
+
+<details><summary>5　练习 2 设每线程 32 个 token 时，Y 的行方向要几块？最后一个行块里几行是真的 token？W 的每一行从内存读几遍？</summary>
+<div class="ans">⌈145 ÷ 32⌉ = 5 个行块；最后一个行块从 Y 的第 128 行开始，有 145 − 128 = 17 行是真的 token；W 的每一行被 5 个行块各读一遍，共 5 遍。</div></details>
+
+<details><summary>6　练习 3 用了共享内存，为什么比练习 2 慢？怎么改？</summary>
+<div class="ans">朴素存法下，一个 warp 读 <code>sW[tx][kk]</code> 时 16 个位置挤在 2 个窗口上，每次要排 8 轮，这一行每个线程执行 896 次 <span class="tag g">推测</span>。改法：搬的时候存成 <code>sW[tx][ty]</code>，算的时候读 <code>sW[kk][tx]</code>。参考答案这样改后是 6.7 ms。</div></details>
+
+<div class="takeaway"><b>下一步：</b>自己把 <code>my_v3.cuh</code> 里 sW 的两处下标对调，跑 <code>bash scripts/board.sh</code>，看时间是不是降到 6.7 ms 左右。先写下你的预测，再跑。</div>
+
+<footer>
+  数据出处（都在 <code>comllm-cuda-kernels</code> 仓库里）：<code>results/2026-11-18/matmul_ex3.txt</code>（第 7 节的全部时间）、<code>results/2026-11-16/matmul_ex2.txt</code>（每线程 4 个 token）、<code>results/2026-11-15/matmul_v2_ref.txt</code>（每线程 8 个 token）、<code>results/2026-11-15/vector_add.txt</code>（带宽 61.1 GB/s、SM 和共享内存参数）、<code>results/2026-11-15/nsys_p145_d133_fa1_node.summary.md</code>（llama.cpp gate 0.33 ms）。讲解原文在 <code>docs/day02.md</code>。写于 2026-11-19。
+</footer>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+const $ = (s, r) => (r || document).querySelector(s);
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const SVGNS = "http://www.w3.org/2000/svg";
+const sv = (tag, attrs, text) => { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text !== undefined) e.textContent = text; return e; };
+const fmt = n => n.toLocaleString("en-US");
+
+/* ---------------- 图：矩阵乘是什么 ---------------- */
+(function(){
+  const N = 6, K = 8, M = 5;
+  const host = $("#mm-grids");
+  let sel = { n: 2, m: 3 };
+  function build(title, rows, cols, kind, rowName, colName){
+    const wrap = el("div", "mgrid-wrap");
+    wrap.appendChild(el("div", "mgrid-title " + kind, title));
+    const g = el("div", "mgrid m" + kind);
+    g.style.gridTemplateColumns = "auto repeat(" + cols + ", var(--c))";
+    g.appendChild(el("div", "cl", ""));
+    for (let c = 0; c < cols; c++) g.appendChild(el("div", "cl", String(c)));
+    const cells = [];
+    for (let r = 0; r < rows; r++){
+      g.appendChild(el("div", "rl", rowName + r));
+      cells.push([]);
+      for (let c = 0; c < cols; c++){
+        const cell = el(kind === "y" ? "button" : "div", "mc");
+        if (kind === "y"){
+          cell.type = "button";
+          cell.setAttribute("aria-label", "Y[" + r + "][" + c + "]");
+          const pick = () => { sel = { n: r, m: c }; update(); };
+          cell.addEventListener("click", pick);
+          cell.addEventListener("mouseenter", pick);
+          cell.addEventListener("focus", pick);
+        }
+        g.appendChild(cell); cells[r].push(cell);
+      }
+    }
+    const foot = el("div", "cl", colName);
+    foot.style.textAlign = "left"; foot.style.marginTop = "2px";
+    wrap.appendChild(g); wrap.appendChild(foot); host.appendChild(wrap);
+    return cells;
+  }
+  const cx = build("X：token × 特征", N, K, "x", "t", "列 = 特征 0–7");
+  const cw = build("W：输出 × 特征", M, K, "w", "o", "列 = 特征 0–7（没有 token 这一维）");
+  const cy = build("Y：token × 输出", N, M, "y", "t", "列 = 输出 0–4");
+  function update(){
+    for (let r = 0; r < N; r++) for (let c = 0; c < K; c++) cx[r][c].classList.toggle("hx", r === sel.n);
+    for (let r = 0; r < M; r++) for (let c = 0; c < K; c++) cw[r][c].classList.toggle("hw", r === sel.m);
+    for (let r = 0; r < N; r++) for (let c = 0; c < M; c++) cy[r][c].classList.toggle("hy", r === sel.n && c === sel.m);
+    const n = sel.n, m = sel.m;
+    const f = $("#mm-formula");
+    f.innerHTML = "";
+    const parts = [el("span", "cy", "Y[" + n + "][" + m + "]"), document.createTextNode(" = ")];
+    for (let k = 0; k < K; k++){
+      if (k === 3){ parts.push(document.createTextNode("… + ")); k = K - 2; }
+      parts.push(el("span", "cx", "X[" + n + "][" + k + "]"));
+      parts.push(document.createTextNode("×"));
+      parts.push(el("span", "cw", "W[" + m + "][" + k + "]"));
+      if (k < K - 1) parts.push(document.createTextNode(" + "));
+    }
+    parts.forEach(p => f.appendChild(p));
+  }
+  update();
+})();
+
+/* ---------------- 图：练习 1 序号 ---------------- */
+(function(){
+  const N = 145, TPB = 256;
+  const cv = $("#e1-cv"), ctx = cv.getContext("2d");
+  const iM = $("#e1-M"), ibx = $("#e1-bx"), itx = $("#e1-tx"), iby = $("#e1-by");
+  const W = 400, H = 324;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+  function draw(M, bx, tx, by){
+    const blocks = Math.ceil(M / TPB);
+    const L = 34, T = 22, AW = W - L - 8, rowH = 1.9, AH = N * rowH;
+    const colW = AW / blocks;
+    ctx.clearRect(0, 0, W, H);
+    const cY = cssVar("--y"), cHot = cssVar("--hot"), cMuted = cssVar("--muted"), cInk = cssVar("--ink"), cLine = cssVar("--line"), cSurf = cssVar("--surface");
+    ctx.globalAlpha = 0.28; ctx.fillStyle = cY; ctx.fillRect(L, T, AW, AH); ctx.globalAlpha = 1;
+    const lastValid = (M - (blocks - 1) * TPB) / TPB;
+    if (lastValid < 1){
+      const x0 = L + (blocks - 1) * colW + lastValid * colW, w0 = colW * (1 - lastValid);
+      ctx.fillStyle = cSurf; ctx.fillRect(x0, T, w0, AH);
+      ctx.save(); ctx.beginPath(); ctx.rect(x0, T, w0, AH); ctx.clip();
+      ctx.strokeStyle = cMuted; ctx.lineWidth = 1;
+      for (let s = -AH; s < w0 + AH; s += 6){ ctx.beginPath(); ctx.moveTo(x0 + s, T); ctx.lineTo(x0 + s + AH, T + AH); ctx.stroke(); }
+      ctx.restore();
+    }
+    ctx.strokeStyle = cLine; ctx.lineWidth = 1;
+    for (let b = 1; b < blocks; b++){ const x = L + b * colW; ctx.beginPath(); ctx.moveTo(x, T); ctx.lineTo(x, T + AH); ctx.stroke(); }
+    ctx.strokeRect(L, T, AW, AH);
+    ctx.globalAlpha = 0.35; ctx.fillStyle = cHot; ctx.fillRect(L, T + by * rowH, AW, rowH); ctx.globalAlpha = 1;
+    ctx.fillStyle = cHot; ctx.fillRect(L + bx * colW, T + by * rowH - 3, colW, rowH + 6);
+    const tX = L + bx * colW + (tx + 0.5) / TPB * colW;
+    ctx.fillStyle = cInk; ctx.fillRect(tX - 1, T + by * rowH - 7, 2, rowH + 14);
+    ctx.fillStyle = cMuted; ctx.font = "11px " + cssVar("--font-mono");
+    ctx.textAlign = "left"; ctx.fillText("blockIdx.x：Y 的第几个列块，0 … " + (blocks - 1), L, 14);
+    ctx.save(); ctx.translate(14, T + AH / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = "center"; ctx.fillText("blockIdx.y：Y 的第几行，0 … 144", 0, 0); ctx.restore();
+    ctx.textAlign = "left"; ctx.fillText("每个小格 = 1 块 = Y 的 1 行 × 256 列", L, T + AH + 16);
+  }
+  function update(){
+    const M = +iM.value;
+    const blocks = Math.ceil(M / TPB);
+    ibx.max = blocks - 1; if (+ibx.value > blocks - 1) ibx.value = blocks - 1;
+    const bx = +ibx.value, tx = +itx.value, by = +iby.value;
+    $("#e1-bxv").textContent = bx; $("#e1-txv").textContent = tx; $("#e1-byv").textContent = by;
+    const m = bx * TPB + tx, n = by;
+    const total = blocks * TPB * N, need = M * N;
+    const o = $("#e1-out"); o.innerHTML = "";
+    const line = (t, cls) => { const s = el("span", cls || "", t); o.appendChild(s); o.appendChild(document.createTextNode("\n")); };
+    line("一个块盖住 Y 的 1 行 × 256 列");
+    line("列块数 = ⌈" + M + " ÷ 256⌉ = " + blocks + "，行块数 = 145，grid(" + blocks + ", 145)");
+    line("列 m = blockIdx.x × 256 + threadIdx.x = " + bx + " × 256 + " + tx + " = " + m);
+    line("行 n = blockIdx.y = " + n);
+    if (m < M) line("→ 这个线程算 Y 第 " + n + " 行第 " + m + " 列，即 Y[" + n + "][" + m + "]\n  要用 X 第 " + n + " 行 · W 第 " + m + " 行", "ok");
+    else line("→ m = " + m + " ≥ M = " + M + "：没有这一格。必须 return，否则会读到 W 外面、写进 Y 的下一行。", "bad");
+    line("");
+    line("开的线程 = " + blocks + " × 256 × 145 = " + fmt(total));
+    line("要算的格 = 145 × " + M + " = " + fmt(need) + (total > need ? "（多 " + fmt(total - need) + " 个闲线程）" : "（正好一样多）"));
+    line("W 第 m 行被读的遍数 = 145（每个 token 一个线程，各读一遍）");
+    draw(M, bx, tx, by);
+  }
+  [iM, ibx, itx, iby].forEach(i => i.addEventListener("input", update));
+  window.__redrawE1 = update;
+  update();
+})();
+
+/* ---------------- 图：练习 2 分组 ---------------- */
+(function(){
+  const N = 145;
+  const Ts = [1, 4, 8, 16, 32];
+  const ms = { 1: 80.3, 4: 22.6, 8: 14.7, 16: 11.2, 32: 11.6 };
+  const src = { 1: "练习 1", 4: "你写的练习 2", 8: "参考 v2", 16: "参考 v2", 32: "你写的练习 2" };
+  let T = 32;
+  const btns = $("#e2-btns");
+  btns.appendChild(el("span", "", "每线程 token 数 T："));
+  const bmap = {};
+  Ts.forEach(t => {
+    const b = el("button", "btn", String(t)); b.type = "button";
+    b.addEventListener("click", () => { T = t; update(); });
+    btns.appendChild(b); bmap[t] = b;
+  });
+  const chart = $("#e2-chart");
+  const X0 = 70, X1 = 520, Y0 = 200, Y1 = 22, YMAX = 90;
+  const xOf = t => X0 + Math.log2(t) / 5 * (X1 - X0);
+  const yOf = v => Y0 - v / YMAX * (Y0 - Y1);
+  function drawChart(){
+    chart.innerHTML = "";
+    for (let v = 0; v <= 80; v += 20){
+      chart.appendChild(sv("line", { x1: X0, x2: X1, y1: yOf(v), y2: yOf(v), class: v ? "grid" : "ax" }));
+      chart.appendChild(sv("text", { x: X0 - 8, y: yOf(v) + 4, "text-anchor": "end", class: "muted" }, String(v)));
+    }
+    chart.appendChild(sv("text", { x: 14, y: 16, class: "muted" }, "时间 ms"));
+    Ts.forEach(t => chart.appendChild(sv("text", { x: xOf(t), y: Y0 + 18, "text-anchor": "middle", class: "muted" }, String(t))));
+    chart.appendChild(sv("text", { x: (X0 + X1) / 2, y: Y0 + 38, "text-anchor": "middle", class: "muted" }, "每线程 token 数 T"));
+    let d = "";
+    for (let i = 0; i <= 60; i++){ const t = 4 * Math.pow(8, i / 60); const v = 7.4 + 59 / t; d += (i ? "L" : "M") + xOf(t).toFixed(1) + "," + yOf(v).toFixed(1); }
+    chart.appendChild(sv("path", { d: d, fill: "none", stroke: cssVar("--muted"), "stroke-width": 1.5, "stroke-dasharray": "5 4" }));
+    chart.appendChild(sv("circle", { cx: xOf(32), cy: yOf(9.24), r: 4, fill: "none", stroke: cssVar("--muted"), "stroke-width": 1.5 }));
+    chart.appendChild(sv("text", { x: xOf(32) - 8, y: yOf(9.24) + 16, "text-anchor": "end", class: "muted" }, "预测 9.2"));
+    let pd = "";
+    Ts.forEach((t, i) => { pd += (i ? "L" : "M") + xOf(t) + "," + yOf(ms[t]); });
+    chart.appendChild(sv("path", { d: pd, fill: "none", stroke: cssVar("--y"), "stroke-width": 2 }));
+    Ts.forEach(t => {
+      const on = t === T;
+      chart.appendChild(sv("circle", { cx: xOf(t), cy: yOf(ms[t]), r: on ? 7 : 4.5, fill: on ? cssVar("--hot") : cssVar("--y") }));
+      chart.appendChild(sv("text", { x: xOf(t) + 10, y: yOf(ms[t]) - 8, style: "font-weight:" + (on ? 700 : 400) }, ms[t].toFixed(1)));
+    });
+  }
+  function update(){
+    Ts.forEach(t => bmap[t].setAttribute("aria-pressed", String(t === T)));
+    const rows = Math.ceil(N / T), last = N - (rows - 1) * T;
+    const strip = $("#e2-strip"); strip.innerHTML = "";
+    for (let g = 0; g < rows; g++){
+      const box = el("span", "grp");
+      box.title = "第 " + g + " 个行块：从 Y 的第 " + (g * T) + " 行起";
+      for (let t = 0; t < T; t++){ const tok = g * T + t; box.appendChild(el("span", "tk" + (tok >= N ? " ghost" : ""))); }
+      strip.appendChild(box);
+    }
+    const st = $("#e2-stats"); st.innerHTML = "";
+    const add = (k, v) => { const s = el("div", "stat"); s.appendChild(el("div", "k", k)); s.appendChild(el("div", "v", v)); st.appendChild(s); };
+    add("行块数 ⌈145 ÷ T⌉", String(rows));
+    add("最后一个行块的真行数（cnt）", String(last));
+    add("线程总数 = 行块数 × 4864", fmt(rows * 4864));
+    add("每个线程的累加器", T + " 个");
+    add("W 每一行从内存读", rows + " 遍");
+    add("搬 W 的总量", "≈ " + Math.round(rows * 17.4) + " MB");
+    add("实测时间（" + src[T] + "）", ms[T].toFixed(1) + " ms");
+    drawChart();
+  }
+  window.__redrawE2 = update;
+  update();
+})();
+
+/* ---------------- 图：练习 3 分步 ---------------- */
+(function(){
+  const TL = 4, K = 12, NSEG = K / TL, M0 = 8, N0 = 4;
+  let tsel = { tx: 1, ty: 2 }, step = 0, timer = null;
+  const steps = [];
+  for (let s = 0; s < NSEG; s++){
+    steps.push({ s: s, ph: "load" });
+    steps.push({ s: s, ph: "sync1" });
+    for (let kk = 0; kk < TL; kk++) steps.push({ s: s, ph: "calc", kk: kk });
+    steps.push({ s: s, ph: "sync2" });
+  }
+  steps.push({ s: NSEG - 1, ph: "write" });
+
+  const code = [
+    "for (int k0 = 0; k0 < K; k0 += TILE) {",
+    "    sX[ty][tx] = (n < N)       ? X[n*K + k0 + tx]       : 0;",
+    "    sW[ty][tx] = (m0 + ty < M) ? W[(m0+ty)*K + k0 + tx] : 0;",
+    "    __syncthreads();                 // 等全块搬完",
+    "    for (int kk = 0; kk < TILE; ++kk)",
+    "        acc += sX[ty][kk] * sW[tx][kk];",
+    "    __syncthreads();                 // 等全块算完",
+    "}",
+    "if (n < N && m < M) Y[n*M + m] = acc;"
+  ];
+  const codeEl = $("#e3-code"), codeLines = [];
+  code.forEach((c, i) => { const d = el("div"); d.appendChild(el("span", "ln", String(i + 1))); d.appendChild(document.createTextNode(c)); codeEl.appendChild(d); codeLines.push(d); });
+
+  // 线程选择
+  const pick = $("#e3-pick"), tbtn = [];
+  pick.appendChild(el("div", "hd", ""));
+  for (let c = 0; c < TL; c++) pick.appendChild(el("div", "hd", "tx=" + c));
+  for (let r = 0; r < TL; r++){
+    pick.appendChild(el("div", "hd", "ty=" + r));
+    tbtn.push([]);
+    for (let c = 0; c < TL; c++){
+      const b = el("button", "tb", c + "," + r); b.type = "button";
+      b.setAttribute("aria-label", "线程 tx=" + c + " ty=" + r);
+      b.addEventListener("click", () => { tsel = { tx: c, ty: r }; render(); });
+      pick.appendChild(b); tbtn[r].push(b);
+    }
+  }
+  // 内存 X / W
+  function memGrid(host, rows, rowLabel){
+    host.style.gridTemplateColumns = "auto repeat(" + K + ", 22px)";
+    host.appendChild(el("div", "cl", ""));
+    for (let c = 0; c < K; c++) host.appendChild(el("div", "cl", String(c)));
+    const cells = [];
+    for (let r = 0; r < rows; r++){
+      host.appendChild(el("div", "rl", rowLabel(r)));
+      cells.push([]);
+      for (let c = 0; c < K; c++){ const d = el("div", "mm"); host.appendChild(d); cells[r].push(d); }
+    }
+    return cells;
+  }
+  const mx = memGrid($("#e3-mx"), TL, r => "token " + (N0 + r));
+  const mw = memGrid($("#e3-mw"), TL, r => "输出 " + (M0 + r));
+  // 共享内存
+  function shGrid(host, rowName, colName){
+    host.appendChild(el("div", "cl", ""));
+    for (let c = 0; c < TL; c++) host.appendChild(el("div", "cl", colName + c));
+    const cells = [];
+    for (let r = 0; r < TL; r++){
+      host.appendChild(el("div", "rl", rowName + r));
+      cells.push([]);
+      for (let c = 0; c < TL; c++){ const d = el("div", "sc"); d.appendChild(el("span", "a")); d.appendChild(el("span", "b")); host.appendChild(d); cells[r].push(d); }
+    }
+    return cells;
+  }
+  const sx = shGrid($("#e3-sx"), "行", "列");
+  const sw = shGrid($("#e3-sw"), "行", "列");
+  // Y
+  const yh = $("#e3-y");
+  yh.appendChild(el("div", "cl", ""));
+  for (let c = 0; c < TL; c++) yh.appendChild(el("div", "cl", "m" + (M0 + c)));
+  const yc = [];
+  for (let r = 0; r < TL; r++){
+    yh.appendChild(el("div", "cl", "n" + (N0 + r)));
+    yc.push([]);
+    for (let c = 0; c < TL; c++){ const d = el("div", "yc"); yh.appendChild(d); yc[r].push(d); }
+  }
+
+  function render(){
+    const S = steps[step], k0 = S.s * TL, tx = tsel.tx, ty = tsel.ty, m = M0 + tx, n = N0 + ty;
+    // 已加进 acc 的特征数
+    let done;
+    if (S.ph === "load" || S.ph === "sync1") done = k0;
+    else if (S.ph === "calc") done = k0 + S.kk;
+    else if (S.ph === "sync2") done = k0 + TL;
+    else done = K;
+    // 线程按钮
+    for (let r = 0; r < TL; r++) for (let c = 0; c < TL; c++){
+      const b = tbtn[r][c];
+      b.setAttribute("aria-pressed", String(r === ty && c === tx));
+      b.classList.toggle("lw", S.ph === "calc" && r === tx);
+      b.classList.toggle("lx", S.ph === "calc" && r === ty);
+    }
+    $("#e3-who").textContent = "m = m0 + tx = " + M0 + " + " + tx + " = " + m + "\nn = n0 + ty = " + N0 + " + " + ty + " = " + n + "\n它最后算 Y 第 " + n + " 行第 " + m + " 列";
+    $("#e3-who").style.whiteSpace = "pre-wrap";
+    // 内存
+    for (let r = 0; r < TL; r++) for (let c = 0; c < K; c++){
+      const inSeg = S.ph !== "write" && c >= k0 && c < k0 + TL;
+      [mx[r][c], mw[r][c]].forEach(d => { d.className = "mm" + (inSeg ? " seg" : ""); });
+      if (r === ty && c < done) mx[r][c].classList.add("done");
+      if (r === tx && c < done) mw[r][c].classList.add("done");
+    }
+    if (S.ph === "load"){ mx[ty][k0 + tx].classList.add("hot"); mw[ty][k0 + tx].classList.add("hot"); }
+    if (S.ph === "calc"){ mx[ty][k0 + S.kk].classList.add("hot"); mw[tx][k0 + S.kk].classList.add("hot"); }
+    // 共享内存
+    for (let r = 0; r < TL; r++) for (let c = 0; c < TL; c++){
+      const a = sx[r][c], b = sw[r][c];
+      a.className = "sc"; b.className = "sc";
+      a.firstChild.textContent = "X[" + (N0 + r) + "][" + (k0 + c) + "]";
+      b.firstChild.textContent = "W[" + (M0 + r) + "][" + (k0 + c) + "]";
+      a.lastChild.textContent = "(" + c + "," + r + ") 搬";
+      b.lastChild.textContent = "(" + c + "," + r + ") 搬";
+      if (S.ph === "calc"){ if (r === ty) a.classList.add("row"); if (r === tx) b.classList.add("row"); }
+    }
+    if (S.ph === "load"){ sx[ty][tx].classList.add("hot"); sw[ty][tx].classList.add("hot"); }
+    if (S.ph === "calc"){ sx[ty][S.kk].classList.add("hot"); sw[tx][S.kk].classList.add("hot"); }
+    // Y
+    for (let r = 0; r < TL; r++) for (let c = 0; c < TL; c++){
+      yc[r][c].className = "yc" + (r === ty && c === tx ? " me" : "") + (S.ph === "write" ? " wr" : "");
+    }
+    // 代码行
+    const hl = { load: [0, 1, 2], sync1: [3], calc: [4, 5], sync2: [6], write: [8] }[S.ph];
+    codeLines.forEach((d, i) => d.classList.toggle("on", hl.indexOf(i) >= 0));
+    // 说明
+    const say = $("#e3-say");
+    const seg = "第 " + (S.s + 1) + " 段（k0 = " + k0 + "，特征 " + k0 + "–" + (k0 + TL - 1) + "）";
+    let html = "";
+    if (S.ph === "load"){
+      html = "<b>" + seg + "：搬。</b>16 个线程每人搬一个 X、一个 W，填满两张小表。你选的线程 (" + tx + "," + ty + ") 搬 " +
+        "<span class='cx'>sX[" + ty + "][" + tx + "] ← X[" + n + "][" + (k0 + tx) + "]</span>，" +
+        "<span class='cw'>sW[" + ty + "][" + tx + "] ← W[" + (M0 + ty) + "][" + (k0 + tx) + "]</span>。" +
+        (M0 + ty !== m ? "它搬的是 W 第 " + (M0 + ty) + " 行（对应 Y 第 " + (M0 + ty) + " 列），不是它自己要的 W 第 " + m + " 行：搬是在替全块干活。" : "这次它搬的 W 恰好是自己的输出 " + m + "，因为 tx = ty。");
+    } else if (S.ph === "sync1"){
+      html = "<b>" + seg + "：等齐。</b><code>__syncthreads()</code> 等全块 16 个线程都搬完。没有这一句，有人会去读还没放进来的格子。";
+    } else if (S.ph === "calc"){
+      html = "<b>" + seg + "：算，kk = " + S.kk + "。</b>acc += <span class='cx'>sX[" + ty + "][" + S.kk + "]</span> × <span class='cw'>sW[" + tx + "][" + S.kk + "]</span>，" +
+        "也就是 X[" + n + "][" + (k0 + S.kk) + "] × W[" + m + "][" + (k0 + S.kk) + "]。它用 sW 第 " + tx + " 行，" +
+        "这一行是 ty = " + tx + " 的 4 个线程搬的（琥珀色框）；sX 第 " + ty + " 行是 ty = " + ty + " 的 4 个线程搬的（青绿色框）。数都从共享内存取，不再去内存。";
+    } else if (S.ph === "sync2"){
+      html = "<b>" + seg + "：再等齐。</b>等全块都算完这一段，才能进下一段把小表覆盖掉。" + (S.s < NSEG - 1 ? "否则快的线程会把别人还在用的数换掉。" : "这是最后一段。");
+    } else {
+      html = "<b>写回。</b>" + K + " 个特征都加进 acc 了，写 <span class='cy'>Y[" + n + "][" + m + "]</span> = acc。只有 n &lt; N、m &lt; M 的线程才写。整块 16 个线程同时写完这一小块。";
+    }
+    html += "<br><span style='color:var(--muted);font-size:.85em'>acc 里已经加了 " + done + " / " + K + " 项。</span>";
+    say.innerHTML = html;
+    $("#e3-count").textContent = "第 " + (step + 1) + " / " + steps.length + " 步";
+    $("#e3-prev").disabled = step === 0;
+    $("#e3-next").disabled = step === steps.length - 1;
+  }
+  function stop(){ if (timer){ clearInterval(timer); timer = null; } $("#e3-play").setAttribute("aria-pressed", "false"); $("#e3-play").textContent = "自动播放"; }
+  $("#e3-prev").addEventListener("click", () => { stop(); if (step > 0){ step--; render(); } });
+  $("#e3-next").addEventListener("click", () => { stop(); if (step < steps.length - 1){ step++; render(); } });
+  $("#e3-reset").addEventListener("click", () => { stop(); step = 0; render(); });
+  $("#e3-play").addEventListener("click", () => {
+    if (timer){ stop(); return; }
+    if (step === steps.length - 1) step = 0;
+    $("#e3-play").setAttribute("aria-pressed", "true"); $("#e3-play").textContent = "暂停";
+    timer = setInterval(() => { if (step < steps.length - 1){ step++; render(); } else stop(); }, 1400);
+    render();
+  });
+  render();
+})();
+
+/* ---------------- 图：bank 冲突 ---------------- */
+(function(){
+  let lay = "naive", op = "read", kk = 0;
+  const grid = $("#bk-grid"), cells = [];
+  grid.appendChild(el("div", "cl", ""));
+  for (let c = 0; c < 16; c++) grid.appendChild(el("div", "cl", String(c)));
+  for (let r = 0; r < 16; r++){
+    grid.appendChild(el("div", "rl", String(r)));
+    cells.push([]);
+    for (let c = 0; c < 16; c++){
+      const addr = r * 16 + c;
+      const d = el("div", "bc" + (r % 2 ? " half" : ""), String(addr % 32));
+      d.title = "sW[" + r + "][" + c + "]：位置 " + addr + "，窗口 " + (addr % 32);
+      grid.appendChild(d); cells[r].push(d);
+    }
+  }
+  function access(){
+    const out = [];
+    for (let lin = 0; lin < 32; lin++){
+      const tx = lin % 16, ty = Math.floor(lin / 16);
+      let a;
+      if (op === "read") a = lay === "naive" ? tx * 16 + kk : kk * 16 + tx;
+      else a = lay === "naive" ? ty * 16 + tx : tx * 16 + ty;
+      out.push({ tx: tx, ty: ty, a: a, b: a % 32 });
+    }
+    return out;
+  }
+  function update(){
+    document.querySelectorAll("[data-lay]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lay === lay)));
+    document.querySelectorAll("[data-op]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.op === op)));
+    $("#bk-kk").disabled = op === "write";
+    $("#bk-kkv").textContent = op === "write" ? "—" : kk;
+    const acc = access();
+    const used = new Set(acc.map(x => x.a));
+    for (let r = 0; r < 16; r++) for (let c = 0; c < 16; c++) cells[r][c].classList.toggle("acc", used.has(r * 16 + c));
+    const per = Array.from({ length: 32 }, () => new Set());
+    acc.forEach(x => per[x.b].add(x.a));
+    const rounds = Math.max.apply(null, per.map(s => s.size));
+    const busy = per.filter(s => s.size > 0).length;
+    let expr;
+    if (op === "read") expr = lay === "naive" ? "读 sW[tx][kk]，位置 = tx × 16 + kk" : "读 sW[kk][tx]，位置 = kk × 16 + tx";
+    else expr = lay === "naive" ? "写 sW[ty][tx]，位置 = ty × 16 + tx" : "写 sW[tx][ty]，位置 = tx × 16 + ty";
+    const o = $("#bk-out"); o.innerHTML = "";
+    const line = (t, cls) => { o.appendChild(el("span", cls || "", t)); o.appendChild(document.createTextNode("\n")); };
+    line("warp 0：ty = 0、1，tx = 0 … 15，共 32 个线程");
+    line(expr);
+    line("要的不同位置：" + used.size + " 个，落在 " + busy + " 个窗口上");
+    line("→ 要排 " + rounds + " 轮" + (rounds === 1 ? "，一次取完" : "，最挤的窗口里有 " + rounds + " 个不同位置"), rounds === 1 ? "ok" : "bad");
+    line(op === "read" ? "这一行每个线程执行 16 × 56 = 896 次" : "这一行每个线程执行 56 次（每段 1 次）");
+    if (op === "read" && lay === "naive") line("两个 ty 要的是同样的位置，可以共用，所以是 8 轮不是 16 轮");
+    $("#bk-title").textContent = lay === "naive" ? "sW[输出][特征]，格里的数是窗口号" : "sW[特征][输出]，格里的数是窗口号";
+    // 条形图
+    const svg = $("#bk-bars"); svg.innerHTML = "";
+    const L = 8, R = 332, B = 120, Tp = 18, bw = (R - L) / 32, unit = (B - Tp) / 8;
+    svg.appendChild(sv("text", { x: L, y: 12, class: "muted" }, "每个窗口要排的不同位置数（0–31 号窗口）"));
+    for (let b = 0; b < 32; b++){
+      const h = per[b].size * unit;
+      if (h > 0) svg.appendChild(sv("rect", { x: L + b * bw + 1, y: B - h, width: bw - 2, height: h, rx: 1.5, fill: per[b].size > 1 ? cssVar("--hot") : cssVar("--good") }));
+      else svg.appendChild(sv("rect", { x: L + b * bw + 1, y: B - 2, width: bw - 2, height: 2, fill: cssVar("--line") }));
+      if (b % 8 === 0) svg.appendChild(sv("text", { x: L + b * bw + bw / 2, y: B + 14, "text-anchor": "middle", class: "muted" }, String(b)));
+    }
+    svg.appendChild(sv("line", { x1: L, x2: R, y1: B, y2: B, class: "ax" }));
+    svg.appendChild(sv("text", { x: R, y: B + 28, "text-anchor": "end", class: "muted" }, "柱高 1 格 = 1 个位置，最高 8"));
+  }
+  document.querySelectorAll("[data-lay]").forEach(b => b.addEventListener("click", () => { lay = b.dataset.lay; update(); }));
+  document.querySelectorAll("[data-op]").forEach(b => b.addEventListener("click", () => { op = b.dataset.op; update(); }));
+  $("#bk-kk").addEventListener("input", e => { kk = +e.target.value; update(); });
+  window.__redrawBK = update;
+  update();
+})();
+
+/* ---------------- 图：全部结果 ---------------- */
+(function(){
+  const rows = [
+    { name: "练习 1（你写的）", ms: 80.34, kind: "mine" },
+    { name: "练习 3（你写的，共享内存朴素）", ms: 13.66, kind: "mine" },
+    { name: "练习 2（你写的，T = 32）", ms: 11.59, kind: "mine" },
+    { name: "参考 v2（T = 16）", ms: 11.15, kind: "ref" },
+    { name: "参考 v2b（固定循环次数）", ms: 9.22, kind: "ref" },
+    { name: "参考 v4（v2 + 共享内存，256）", ms: 7.38, kind: "ref" },
+    { name: "参考 v3（共享内存，W 转置）", ms: 6.68, kind: "ref" },
+    { name: "参考 v4（v2 + 共享内存，257）", ms: 3.06, kind: "ref" }
+  ];
+  const refs = [
+    { name: "float 算力下限 0.60（估算）", ms: 0.60 },
+    { name: "llama.cpp gate 0.33（实测，int8，不是同一种运算）", ms: 0.33 }
+  ];
+  const svg = $("#all-chart");
+  function draw(){
+    svg.innerHTML = "";
+    const L = 250, R = 730, T = 18, rowH = 34, lo = Math.log10(0.2), hi = Math.log10(100);
+    const xOf = v => L + (Math.log10(v) - lo) / (hi - lo) * (R - L);
+    const B = T + rows.length * rowH;
+    [0.3, 1, 3, 10, 30, 100].forEach(v => {
+      svg.appendChild(sv("line", { x1: xOf(v), x2: xOf(v), y1: T - 6, y2: B, class: "grid" }));
+      svg.appendChild(sv("text", { x: xOf(v), y: B + 16, "text-anchor": "middle", class: "muted" }, v + " ms"));
+    });
+    rows.forEach((r, i) => {
+      const y = T + i * rowH;
+      const col = r.kind === "mine" ? cssVar("--y") : cssVar("--muted");
+      svg.appendChild(sv("text", { x: L - 10, y: y + 18, "text-anchor": "end", style: r.kind === "mine" ? "font-weight:700" : "" }, r.name));
+      svg.appendChild(sv("rect", { x: xOf(0.2), y: y + 6, width: xOf(r.ms) - xOf(0.2), height: 18, rx: 3, fill: col, opacity: r.kind === "mine" ? 1 : 0.55 }));
+      svg.appendChild(sv("text", { x: xOf(r.ms) + 6, y: y + 19, style: "font-variant-numeric:tabular-nums" }, r.ms.toFixed(2)));
+    });
+    refs.forEach((r, i) => {
+      const x = xOf(r.ms);
+      svg.appendChild(sv("line", { x1: x, x2: x, y1: T - 6, y2: B, stroke: i ? cssVar("--x") : cssVar("--w"), "stroke-width": 1.6, "stroke-dasharray": "5 4" }));
+      svg.appendChild(sv("text", { x: 12, y: B + 40 + i * 18, style: "fill:" + (i ? cssVar("--x") : cssVar("--w")) }, "┆ " + r.name));
+    });
+  }
+  window.__redrawAll = draw;
+  draw();
+})();
+
+/* 主题切换时重画用到计算颜色的图 */
+const redraw = () => { [window.__redrawE1, window.__redrawE2, window.__redrawBK, window.__redrawAll].forEach(f => f && f()); };
+try { window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw); } catch (e) {}
+try { new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] }); } catch (e) {}
+})();
+</script>
+</body>
+</html>
