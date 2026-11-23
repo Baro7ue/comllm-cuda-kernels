@@ -1,0 +1,7 @@
+build/
+__pycache__/
+*.nsys-rep
+*.sqlite
+.DS_Store
+HANDOFF_*.md
+.claude/
