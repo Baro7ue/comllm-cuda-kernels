@@ -38,7 +38,8 @@
 const int TOK = 16;
 const int SEG = 16;
 
-__global__ void my_v4a_kernel(const float* X, const float* W, float* Y, int N, int K, int M) {
+__global__ void my_v4a_kernel(const float* X, const float* W, float* Y, int N, int K, int M) 
+{
     // 小表：X 的 16 行（这个块的 16 个 token）× 16 列（这一段的 16 个特征）。已写好，不用改。
     __shared__ float sX[TOK][SEG];   // sX[块内第几个 token][段内第几个特征]
 
@@ -58,8 +59,8 @@ __global__ void my_v4a_kernel(const float* X, const float* W, float* Y, int N, i
     //     ty = 我在方阵里第几行，tx = 我在方阵里第几列，都从 tid 算出来。
     //   提示：tid 从 0 数到 255，每数满 16 个换一行。
     // 在这里写：
-
-
+    const int ty = tid/SEG;
+    const int tx = tid%SEG;
 
     // ---- 第 3 步：外层循环 k0 从 0 开始，每次加 SEG，到 K 为止（和练习 3 的外层循环一样）----
     //   循环体里依次做 3a、3b、3c、3d：
@@ -74,12 +75,42 @@ __global__ void my_v4a_kernel(const float* X, const float* W, float* Y, int N, i
     //                              └ 这个数现在去 sX 里取，不去 X 里取。它在 sX 的第几行、第几列？
     //   3d（新）__syncthreads();   等全块算完，才能进下一段覆盖 sX。
     // 在这里写：
+    const float* w = W + m * K;
+    for (int k0 = 0; k0 < K; k0 += SEG)
+    {   
+        if (n0 + ty < N)
+        {
+            sX[ty][tx] = X[(n0 + ty) * K + (k0 + tx)];
+        } 
+        else
+        {
+            sX[ty][tx] = 0.0f;
+        }
 
+        __syncthreads();
 
+        if (m < M)
+        {
+            for (int kk = 0; kk < SEG; ++kk)
+            {
+                for (int t = 0; t < cnt; ++t)
+                {
+                    acc[t] += sX[t][kk] * w[k0 + kk];
+                }
+            }
+        }
 
+        __syncthreads();
+    }
     // ---- 第 4 步：写回。和练习 2 一样，但多一个条件：m < M 才写 ----
     //   （练习 2 里越界的线程早就 return 了，所以不用判断；现在它们还在。）
     // 在这里写：
+    if (m < M)
+    for (int t = 0; t < cnt; ++t)
+    {
+        Y[(n0 + t)*M + m] = acc[t];
+    }
+
 
 }
 
